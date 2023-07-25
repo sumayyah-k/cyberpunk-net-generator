@@ -62,10 +62,33 @@
               >&#8621;</button>
             </div>
           </div>
+          <div class="floor-controls-mobile">
+            <template v-if="element.split.length == 0">
+              <button
+                v-for="(difficultyName, diff) in difficultyTable"
+                :key="diff"
+                type="button"
+                @click="addRoom(diff, index)"
+                class="floor-control-btn"
+                :title="'Add ' + difficultyName + ' floor'"
+              >+ {{ difficultyName[0] }}</button>
+            </template>
+            <button
+              v-if="index == list.length - 1"
+              type="button"
+              class="floor-control-btn"
+              @click="splitFloor(element)"
+              title="Split"
+            >&#8621;</button>
+            <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#x21bb;</button>
+                <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
+          </div>
           <div v-if="(index != list.length - 1) || element.split.length > 0" class="floor-arrow-wrap">
             <div class="floor-arrow" v-for="a in element.split.length || 1"></div>
           </div>
         </div>
+
+        
         <div v-if="element.split && element.split.length > 0" class="floor-split-wrap">
           <div v-for="(col, colIndex) in element.split" key="col.id" class="floor-split-column">
             <Floor :list="col.rooms" :floorLetter="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[colIndex]" />
@@ -316,24 +339,11 @@ export default {
         }
       }
     }
-    .floor-control-btn {
-      opacity:0;
-      background: var(--red);
-      border:none;
-      font-size:1.25rem;
-      line-height:1.5;
-      transition: opacity .2s linear;
-      margin-left: .5rem;
-      cursor: pointer;
-    }
+    
     .floor-controls {
       position: absolute;
-      bottom: -1rem;
+      bottom: 0;
       width:100%;
-      display:flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom:1rem;
       z-index:2;
       .floor-control-btn {
         font-size:1rem;
@@ -360,6 +370,24 @@ export default {
         opacity:1;
       }
     }
+  }
+  .floor-control-btn {
+    opacity:0;
+    background: var(--red);
+    border:none;
+    font-size:1.25rem;
+    line-height:1.5;
+    transition: opacity .2s linear;
+    margin-left: .5rem;
+    cursor: pointer;
+  }
+  .floor-controls, .floor-controls-mobile {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .floor-controls-mobile {
+    display:none;
   }
   .floor-split-wrap {
     display:flex;
@@ -395,6 +423,18 @@ export default {
             font-size: .85rem;
           }
         }
+        .floor-controls, .floor-top-right-controls {
+          display:none;
+        }
+      }
+    }
+    .floor-controls-mobile {
+      display:flex;
+      margin-bottom:1rem;
+      .floor-control-btn {
+        opacity:1;
+        white-space: nowrap;
+        font-size:.9rem;
       }
     }
   }
