@@ -15,6 +15,10 @@
             <div class="floor-num">
               <div class="floor-header">Floor</div>
               {{ index + 1 }}<small v-if="floorLetter">{{ floorLetter }}</small>
+              <div class="floor-mobile-dv">
+                <div class="floor-header">DV</div>
+                {{ element.feature.DV || '-' }}
+              </div>
             </div>
             <div class="floor-feature">
               <div class="floor-difficulty">{{ difficultyTable[element.difficulty] }}</div>
@@ -269,11 +273,15 @@ export default {
           margin-bottom:.5rem;
         }
         small {
-          font-size:1.1rem;
+          font-size:.85em;
+        }
+        .floor-mobile-dv {
+          display:none;
         }
       }
       .floor-feature {
         margin: 0 1rem;
+        padding:1.5rem 0;
         flex:1;
         display:flex;
         flex-wrap: wrap;
@@ -285,6 +293,7 @@ export default {
           position:absolute;
           top:0;
           right:0;
+          z-index:2;
           .floor-remove-btn {
             margin-left:.5rem;
           }
@@ -325,6 +334,7 @@ export default {
       align-items: center;
       justify-content: center;
       margin-bottom:1rem;
+      z-index:2;
       .floor-control-btn {
         font-size:1rem;
         border:6px solid var(--background-color);
@@ -359,6 +369,33 @@ export default {
     .floor-split-column {
       flex:1;
       margin: 0 1rem;
+    }
+  }
+  @media (max-width: 500px) {
+    .floor-display-wrap {
+      .floor-display {
+        .floor-num, .floor-dv {
+          font-size: 1.5rem;
+          width:auto;
+          .floor-header {
+            font-size: 1rem;
+            padding: 0 1rem;
+          }
+          .floor-mobile-dv {
+            display:block;
+          }
+        }
+        .floor-dv {
+          display:none;
+        }
+        .floor-feature {
+          margin-right:0;
+          padding:1.5rem 0 1rem;
+          .floor-difficulty {
+            font-size: .85rem;
+          }
+        }
+      }
     }
   }
 }
