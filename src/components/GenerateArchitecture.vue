@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h1>Hi</h1>
+    <h1>Cyberpunk: Red Net architecture generator</h1>
+    <p>Pretty basic for now. Refresh to start over.</p>
     <Floor
       :list="floors"
     />
 
-    <pre>{{ floors }}</pre>
+    <pre v-if="false">{{ floors }}</pre>
   </div>
 </template>
 

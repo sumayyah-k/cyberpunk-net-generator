@@ -19,8 +19,8 @@
             <div class="floor-feature">
               <div class="floor-difficulty">{{ difficultyTable[element.difficulty] }}</div>
               <div class="floor-top-right-controls">
-                <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn">&#x21bb;</button>
-                <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn">&times;</button>
+                <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#x21bb;</button>
+                <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
               </div>
               <strong>{{ element.feature.type }}</strong>
               <template v-if="element.feature.type != 'Password'">
@@ -37,25 +37,26 @@
               <div class="floor-header">DV</div>
               {{ element.feature.DV || '-' }}
             </div>
-          </div>
-          <div class="floor-controls">
-            <template v-if="element.split.length == 0">
+
+            <div class="floor-controls">
+              <template v-if="element.split.length == 0">
+                <button
+                  v-for="(difficultyName, diff) in difficultyTable"
+                  :key="diff"
+                  type="button"
+                  @click="addRoom(diff, index)"
+                  class="floor-control-btn"
+                  :title="'Add ' + difficultyName + ' floor'"
+                >+ {{ difficultyName[0] }}</button>
+              </template>
               <button
-                v-for="(difficultyName, diff) in difficultyTable"
-                :key="diff"
+                v-if="index == list.length - 1"
                 type="button"
-                @click="addRoom(diff, index)"
                 class="floor-control-btn"
-                :title="'Add ' + difficultyName + ' floor'"
-              >+ {{ difficultyName[0] }}</button>
-            </template>
-            <button
-              v-if="index == list.length - 1"
-              type="button"
-              class="floor-control-btn"
-              @click="splitFloor(element)"
-              title="Split"
-            >&#8621;</button>
+                @click="splitFloor(element)"
+                title="Split"
+              >&#8621;</button>
+            </div>
           </div>
           <div v-if="(index != list.length - 1) || element.split.length > 0" class="floor-arrow-wrap">
             <div class="floor-arrow" v-for="a in element.split.length || 1"></div>
@@ -318,7 +319,7 @@ export default {
     }
     .floor-controls {
       position: absolute;
-      bottom: .75rem;
+      bottom: -1rem;
       width:100%;
       display:flex;
       align-items: center;
