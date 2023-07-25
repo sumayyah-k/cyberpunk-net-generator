@@ -5,6 +5,7 @@
     item-key="id"
     class="list-group"
     ghost-class="ghost"
+    handle=".floor-handle"
     @start="dragging = true"
     @end="dragging = false"
   >
@@ -21,6 +22,7 @@
               </div>
             </div>
             <div class="floor-feature">
+              <div class="floor-handle">&#8942;</div>
               <div class="floor-difficulty">{{ difficultyTable[element.difficulty] }}</div>
               <div class="floor-top-right-controls">
                 <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#x21bb;</button>
@@ -312,6 +314,18 @@ export default {
         align-items: center;
         justify-content: center;
         border: 6px solid var(--red);
+        border-left-width: 0;
+        .floor-handle {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position:absolute;
+          top:0;
+          left:0;
+          bottom:0;
+          width:1.5rem;
+          background-color: var(--red);
+        }
         .floor-top-right-controls {
           position:absolute;
           top:0;
@@ -324,7 +338,7 @@ export default {
         .floor-difficulty {
           position:absolute;
           top:0;
-          left:0;
+          left:1rem;
           background: var(--red);
           padding: 0 1rem;
           font-weight:bold;
