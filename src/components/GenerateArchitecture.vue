@@ -1,7 +1,13 @@
 <template>
-  <div>
+  <div class="generator">
     <h1>Cyberpunk: Red Net architecture generator</h1>
     <p>Pretty basic for now. Refresh to start over.</p>
+    <p>
+      Average Difficulty: {{ difficultyRating[averageDifficulty].type }}<br />
+      Interface of a Netrunner with a fighting chance: {{ difficultyRating[averageDifficulty].fightingChance || 'N/A' }}<br />
+      Interface of a Netrunner who might die before reaching the bottom: {{ difficultyRating[averageDifficulty].deadly || 'N/A' }}<br />
+      <small>* Average skips over the first two rooms if both are lobby</small>
+    </p>
     <Floor
       :list="floors"
     />
@@ -16,6 +22,13 @@ import Floor from './Floor.vue';
 export default {
   data: () => ({
     floors: [],
+    difficultyRating: [
+      {type: 'Lobby', DV: 6, fightingChance: 2, deadly: null},
+      {type: 'Basic', DV: 6, fightingChance: 2, deadly: null},
+      {type: 'Standard', DV: 8, fightingChance: 4, deadly: 2},
+      {type: 'Uncommon', DV: 10, fightingChance: 6, deadly: 4},
+      {type: 'Advanced', DV: 12, fightingChance: 8, deadly: 6},
+    ]
   }),
   components: {
     Floor
@@ -23,7 +36,34 @@ export default {
   mounted() {
     this.generateLobby();
   },
+  computed: {
+    averageDifficulty() {
+      var array = this.getDifficultyArray(this.floors);
+
+      if (array.length) {
+        if (array[0] == 0 && array[1] == 0) {
+          array.splice(0, 2); //Remove Lobby
+        }
+        if (array.length) {
+          return Math.ceil(array.reduce((a, b) => a + b, 0) / array.length);
+        }
+      }
+      return 0;
+    }
+  },
   methods: {
+    getDifficultyArray(list) {
+      var diff = [];
+      for (const f of list) {
+        diff.push(f.difficulty);
+        if (f.split.length > 0) {
+          for (const col of f.split) {
+            diff = [...diff, ...this.getDifficultyArray(col.rooms)];
+          }
+        }
+      }
+      return diff;
+    },
     generateLobby() {
       this.floors.push(this.generateLobbyRoom());
       this.floors.push(this.generateLobbyRoom());
@@ -51,3 +91,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.generator {
+  padding-bottom:10rem;
+}
+</style>

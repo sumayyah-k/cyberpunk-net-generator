@@ -3,11 +3,9 @@
     :list="list"
     :disabled="!enabled"
     item-key="id"
+    group="floors"
     class="list-group"
-    ghost-class="ghost"
     handle=".floor-handle"
-    @start="dragging = true"
-    @end="dragging = false"
   >
     <template #item="{ element, index }">
       <div class="floor-wrap">
@@ -23,9 +21,19 @@
             </div>
             <div class="floor-feature">
               <div class="floor-handle">&#8942;</div>
-              <div class="floor-difficulty">{{ difficultyTable[element.difficulty] }}</div>
+              <div class="floor-difficulty">
+                <button
+                  type="button"
+                  class="floor-control-btn"
+                  @click="changeDifficulty(element)"
+                  title="Change Difficulty"
+                >
+                  {{ difficultyTable[element.difficulty] }}
+                </button>
+              </div>
               <div class="floor-top-right-controls">
-                <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#x21bb;</button>
+                <button type="button" @click="cycleFeature(element)" class="floor-control-btn floor-reroll-btn" title="Cycle Floor Type">&#x21bb;</button>
+                <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#127922;</button>
                 <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
               </div>
               <strong>{{ element.feature.type }}</strong>
@@ -82,7 +90,7 @@
               @click="splitFloor(element)"
               title="Split"
             >&#8621;</button>
-            <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#x21bb;</button>
+            <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#127922;</button>
                 <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
           </div>
           <div v-if="(index != list.length - 1) || element.split.length > 0" class="floor-arrow-wrap">
@@ -225,6 +233,26 @@ export default {
     rerollFloor(floor) {
       floor.feature = this.randomFeature(floor.difficulty);
     },
+    changeDifficulty(floor) {
+      console.log('old', floor.difficulty);
+      if (floor.difficulty == this.difficultyTable.length - 1) {
+        floor.difficulty = 0;
+      } else {
+        floor.difficulty = floor.difficulty + 1;
+      }
+      console.log('new', floor.difficulty);
+      floor.feature = this.randomFeature(floor.difficulty);
+    },
+    cycleFeature(floor) {
+      const table = [
+        {type: 'Black ICE', description: 'Asp', DV: null},
+        {type: 'Password', description: null, DV: 4 + (floor.difficulty * 2)},
+        {type: 'Control Node', description: 'Massage Chairs...', DV: 4 + (floor.difficulty * 2)},
+        {type: 'File', description: 'Some File...', DV: 4 + (floor.difficulty * 2)},
+      ];
+      const index = table.findIndex(f => f.type == floor.feature.type);
+      floor.feature = table[index == table.length - 1 ? 0 : index + 1]
+    },
     splitFloor(floor) {
       floor.split.push({id: self.crypto.randomUUID(), rooms: [this.generateRoom(floor.difficulty)]})
       if (floor.split.length == 1) {
@@ -339,9 +367,11 @@ export default {
           position:absolute;
           top:0;
           left:1rem;
-          background: var(--red);
-          padding: 0 1rem;
           font-weight:bold;
+          .floor-control-btn {
+            opacity:1;
+            margin:0;
+          }
         }
         .input-floor-desc {
           border:none;
