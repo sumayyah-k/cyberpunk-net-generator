@@ -1,7 +1,6 @@
 <template>
   <draggable
     :list="list"
-    :disabled="!enabled"
     item-key="id"
     group="floors"
     class="list-group"
@@ -36,16 +35,25 @@
                 <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#127922;</button>
                 <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
               </div>
-              <strong>{{ element.feature.type }}</strong>
-              <template v-if="element.feature.type != 'Password'">
-                :
-                <contenteditable
-                  v-model="element.feature.description"
-                  tag="div"
-                  :contenteditable="true"
-                  class="input-floor-desc"
-                />
-              </template>
+              <div class="floor-feature-content">
+                <strong>{{ element.feature.type }}</strong>
+                <template v-if="element.feature.type != 'Password' && element.feature.type != 'Black ICE'">
+                  :
+                  <contenteditable
+                    v-model="element.feature.description"
+                    tag="div"
+                    :contenteditable="true"
+                    class="input-floor-desc"
+                  />
+                </template>
+                <div v-if="false && element.feature.blackIce.length > 0" class="floor-black-ice-wrap">
+                  <div v-for="bi in element.feature.blackIce" class="floor-black-ice" :class="{derezzed: bi.currentRez == 0}">
+                    <div class="icon" :title="bi.type.name" v-html="bi.type.icon"></div>
+                    <div class="rez"><input type="number" v-model="bi.currentRez" min="0" :max="bi.type.rez"/> / {{ bi.type.rez }}</div>
+                  </div>
+                </div>
+                <FloorBlackIce :list="element.feature.blackIce" />
+              </div>
             </div>
             <div class="floor-dv">
               <div class="floor-header">DV</div>
@@ -98,7 +106,6 @@
           </div>
         </div>
 
-        
         <div v-if="element.split && element.split.length > 0" class="floor-split-wrap">
           <div v-for="(col, colIndex) in element.split" key="col.id" class="floor-split-column">
             <Floor :list="col.rooms" :floorLetter="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[colIndex]" />
@@ -112,6 +119,8 @@
 <script>
 import draggable from "vuedraggable";
 import contenteditable from 'vue-contenteditable'
+import {store} from '../store'
+import FloorBlackIce from "./FloorBlackIce.vue";
 
 export default {
   props: {
@@ -127,6 +136,7 @@ export default {
     }
   },
   data: () => ({
+    store,
     difficultyTable: [
       'Lobby',
       'Basic',
@@ -134,90 +144,11 @@ export default {
       'Uncommon',
       'Advanced',
     ],
-    rollTableLobby: [
-      {type: 'File', description: 'Some boring file...', DV: 6},
-      {type: 'Password', description: null, DV: 6},
-      {type: 'Password', description: null, DV: 8},
-      {type: 'Black ICE', description: 'Skunk', DV: null},
-      {type: 'Black ICE', description: 'Wisp', DV: null},
-      {type: 'Black ICE', description: 'Killer', DV: null},
-    ],
-    rollTableBasic: [
-      {type: 'Black ICE', description: 'Hellhound', DV: null},
-      {type: 'Black ICE', description: 'Sabertooth', DV: null},
-      {type: 'Black ICE', description: 'Raven x2', DV: null},
-      {type: 'Black ICE', description: 'Hellhound', DV: null},
-      {type: 'Black ICE', description: 'Wisp', DV: null},
-      {type: 'Black ICE', description: 'Raven', DV: null},
-      {type: 'Password', description: null, DV: 6},
-      {type: 'File', description: 'Some exciting file...', DV: 6},
-      {type: 'Control Node', description: null, DV: 6},
-      {type: 'Password', description: null, DV: 6},
-      {type: 'Black ICE', description: 'Skunk', DV: null},
-      {type: 'Black ICE', description: 'Asp', DV: null},
-      {type: 'Black ICE', description: 'Scorpion', DV: null},
-      {type: 'Black ICE', description: 'Killer, Skunk', DV: null},
-      {type: 'Black ICE', description: 'Wisp x3', DV: null},
-      {type: 'Black ICE', description: 'Liche', DV: null},
-    ],
-    rollTableUncommon: [
-      {type: 'Black ICE', description: 'Kraken', DV: null},
-      {type: 'Black ICE', description: 'Hellhound, Scorpion', DV: null},
-      {type: 'Black ICE', description: 'Hellhound, Killer', DV: null},
-      {type: 'Black ICE', description: 'Raven x2', DV: null},
-      {type: 'Black ICE', description: 'Sabertooth', DV: null},
-      {type: 'Black ICE', description: 'Hellhound', DV: null},
-      {type: 'Password', description: null, DV: 10},
-      {type: 'File', description: 'Some exciting file...', DV: 10},
-      {type: 'Control Node', description: null, DV: 10},
-      {type: 'Password', description: null, DV: 10},
-      {type: 'Black ICE', description: 'Killer', DV: null},
-      {type: 'Black ICE', description: 'Liche', DV: null},
-      {type: 'Black ICE', description: 'Dragon', DV: null},
-      {type: 'Black ICE', description: 'Asp, Raven', DV: null},
-      {type: 'Black ICE', description: 'Dragon, Wisp', DV: null},
-      {type: 'Black ICE', description: 'Giant', DV: null},
-    ],
-    rollTableAdvanced: [
-      {type: 'Black ICE', description: 'Hellhound x3', DV: null},
-      {type: 'Black ICE', description: 'Asp x2', DV: null},
-      {type: 'Black ICE', description: 'Hellhound, Liche', DV: null},
-      {type: 'Black ICE', description: 'Wisp x3', DV: null},
-      {type: 'Black ICE', description: 'Hellhound, Sabertooth', DV: null},
-      {type: 'Black ICE', description: 'Kraken', DV: null},
-      {type: 'Password', description: null, DV: 12},
-      {type: 'File', description: 'Some exciting file...', DV: 12},
-      {type: 'Control Node', description: null, DV: 12},
-      {type: 'Password', description: null, DV: 12},
-      {type: 'Black ICE', description: 'Giant', DV: null},
-      {type: 'Black ICE', description: 'Dragon', DV: null},
-      {type: 'Black ICE', description: 'Killer, Scorpion', DV: null},
-      {type: 'Black ICE', description: 'Kraken', DV: null},
-      {type: 'Black ICE', description: 'Raven, Wisp, Hellhound', DV: null},
-      {type: 'Black ICE', description: 'Dragon x2', DV: null},
-    ],
-    rollTableStandard: [
-      {type: 'Black ICE', description: 'Hellhound x2', DV: null},
-      {type: 'Black ICE', description: 'Hellhound, Killer', DV: null},
-      {type: 'Black ICE', description: 'Skunk x2', DV: null},
-      {type: 'Black ICE', description: 'Sabertooth', DV: null},
-      {type: 'Black ICE', description: 'Scorpion', DV: null},
-      {type: 'Black ICE', description: 'Hellhound', DV: null},
-      {type: 'Password', description: null, DV: 8},
-      {type: 'File', description: 'Some exciting file...', DV: 8},
-      {type: 'Control Node', description: null, DV: 8},
-      {type: 'Password', description: null, DV: 8},
-      {type: 'Black ICE', description: 'Asp', DV: null},
-      {type: 'Black ICE', description: 'Killer', DV: null},
-      {type: 'Black ICE', description: 'Liche', DV: null},
-      {type: 'Black ICE', description: 'Asp', DV: null},
-      {type: 'Black ICE', description: 'Raven x3', DV: null},
-      {type: 'Black ICE', description: 'Liche, Raven', DV: null},
-    ]
   }),
   components: {
     draggable,
-    contenteditable
+    contenteditable,
+    FloorBlackIce
   },
   methods: {
     addRoom(difficulty, index) {
@@ -245,10 +176,10 @@ export default {
     },
     cycleFeature(floor) {
       const table = [
-        {type: 'Black ICE', description: 'Asp', DV: null},
-        {type: 'Password', description: null, DV: 4 + (floor.difficulty * 2)},
-        {type: 'Control Node', description: 'Massage Chairs...', DV: 4 + (floor.difficulty * 2)},
-        {type: 'File', description: 'Some File...', DV: 4 + (floor.difficulty * 2)},
+        {type: 'Black ICE', description: 'Asp', DV: null, blackIce: [store.netArch.blackIce.asp], demons: []},
+        {type: 'Password', description: null, DV: 4 + (floor.difficulty * 2), blackIce: [], demons: []},
+        {type: 'Control Node', description: 'Massage Chairs...', DV: 4 + (floor.difficulty * 2), blackIce: [], demons: []},
+        {type: 'File', description: 'Some File...', DV: 4 + (floor.difficulty * 2), blackIce: [], demons: []},
       ];
       const index = table.findIndex(f => f.type == floor.feature.type);
       floor.feature = table[index == table.length - 1 ? 0 : index + 1]
@@ -271,15 +202,15 @@ export default {
       let rollTable;
 
       if (difficulty == 0) {
-        return this.rollTableLobby[Math.floor(Math.random()*this.rollTableLobby.length)];
+        return store.netArch.rollTableLobby[Math.floor(Math.random()*store.netArch.rollTableLobby.length)];
       } else if (difficulty == 1) {
-        rollTable = this.rollTableBasic;
+        rollTable = store.netArch.rollTableBasic;
       } else if (difficulty == 3) {
-        rollTable = this.rollTableUncommon;
+        rollTable = store.netArch.rollTableUncommon;
       } else if (difficulty == 4) {
-        rollTable = this.rollTableAdvanced;
+        rollTable = store.netArch.rollTableAdvanced;
       } else {
-        rollTable = this.rollTableStandard;
+        rollTable = store.netArch.rollTableStandard;
       }
 
       const roll1 = Math.floor( Math.random() * 6 + 1);
@@ -380,6 +311,48 @@ export default {
           background: var(--background-color);
           border-bottom: 1px solid #333;
           font-size:1.2rem;
+        }
+        .floor-black-ice-wrap {
+          display:flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          .floor-black-ice {
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin:0 .5rem;
+            .rez {
+              font-size:.85rem;
+              input[type=number] {
+                background-color: var(--background-color);
+                border:none;
+                border-bottom: 1px solid #555;
+                width:2rem;
+              }
+            }
+            .icon {
+              position:relative;
+              width:2rem;
+              height:2rem;
+              border: 3px solid var(--red);
+              svg {
+                width:2rem !important;
+                height:2rem !important;
+              }
+            }
+            &.derezzed .icon::after {
+              content:'';
+              position: absolute;
+              top:0;
+              left:0;
+              right:0;
+              bottom:0;
+              background-color: var(--red);
+              opacity:.75;
+            }
+          }
         }
       }
     }

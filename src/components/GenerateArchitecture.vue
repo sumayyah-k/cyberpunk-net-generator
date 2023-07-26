@@ -13,11 +13,16 @@
     />
 
     <pre v-if="false">{{ floors }}</pre>
+
+    <footer>
+      Icons from <a href="https://game-icons.net/" target="_blank">game-icons.net</a>.
+    </footer>
   </div>
 </template>
 
 <script>
 import Floor from './Floor.vue';
+import {store} from '../store'
 
 export default {
   data: () => ({
@@ -77,16 +82,8 @@ export default {
       };
     },
     randomFeature() {
-      const lobbyTable = [
-        {type: 'File', description: null, DV: 6},
-        {type: 'Password', description: null, DV: 6},
-        {type: 'Password', description: null, DV: 8},
-        {type: 'Black ICE', description: 'Skunk', DV: null},
-        {type: 'Black ICE', description: 'Wisp', DV: null},
-        {type: 'Black ICE', description: 'Killer', DV: null},
-      ];
-
-      return lobbyTable[Math.floor(Math.random()*lobbyTable.length)];
+      console.log(store.netArch.rollTableLobby);
+      return store.netArch.rollTableLobby[Math.floor(Math.random() * store.netArch.rollTableLobby.length)];
     }
   }
 }
@@ -94,6 +91,11 @@ export default {
 
 <style scoped>
 .generator {
-  padding-bottom:10rem;
+  padding-left: calc(var(--drawer-width) + 1rem);
+}
+footer {
+  margin-top:3rem;
+  padding: 4rem 1rem;
+  text-align: right;
 }
 </style>
