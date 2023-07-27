@@ -22,7 +22,7 @@
       :list="Object.values(store.netArch.blackIce)"
       item-key="name"
       group="blackice"
-      class="floor-black-ice-wrap"
+      class="floor-black-ice-wrap drawer-black-ice-wrap"
       @start="store.draggingBlackIce = true"
       @end="store.draggingBlackIce = false"
       :clone="cloneBlackIce"
@@ -127,6 +127,10 @@ export default {
       font-size:2rem;
       line-height: 1.5rem;
     }
+  }
+  .drawer-black-ice-wrap {
+    flex-direction: column;
+
   }
 }
 </style>

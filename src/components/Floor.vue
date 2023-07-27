@@ -53,7 +53,7 @@
                     <div class="rez"><input type="number" v-model="bi.currentRez" min="0" :max="bi.type.rez"/> / {{ bi.type.rez }}</div>
                   </div>
                 </div>
-                <FloorBlackIce :list="element.feature.blackIce" />
+                <FloorBlackIce :list="element.feature.blackIce" :show-full="element.netrunners.length > 0"/>
               </div>
             </div>
             <div class="floor-dv">
@@ -320,48 +320,7 @@ export default {
           border-bottom: 1px solid #333;
           font-size:1.2rem;
         }
-        .floor-black-ice-wrap {
-          display:flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          .floor-black-ice {
-            display:flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin:0 .5rem;
-            .rez {
-              font-size:.85rem;
-              input[type=number] {
-                background-color: var(--background-color);
-                border:none;
-                border-bottom: 1px solid #555;
-                width:2rem;
-              }
-            }
-            .icon {
-              position:relative;
-              width:2rem;
-              height:2rem;
-              border: 3px solid var(--red);
-              svg {
-                width:2rem !important;
-                height:2rem !important;
-              }
-            }
-            &.derezzed .icon::after {
-              content:'';
-              position: absolute;
-              top:0;
-              left:0;
-              right:0;
-              bottom:0;
-              background-color: var(--red);
-              opacity:.75;
-            }
-          }
-        }
+        
       }
     }
     
