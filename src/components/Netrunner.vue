@@ -50,8 +50,9 @@ export default {
         } else {
           netrunners = JSON.parse(netrunners);
           const index = netrunners.findIndex(nr => nr.id == netrunner.id);
-          if (index) {
+          if (typeof index == 'number' && index > -1) {
             netrunners[index] = netrunner;
+            console.log(netrunners[index])
           } else {
             netrunners.push(netrunner);
           }
