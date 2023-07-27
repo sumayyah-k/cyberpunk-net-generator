@@ -94,6 +94,7 @@ export default {
             border:none;
             border-bottom: 1px solid #555;
             width:2rem;
+            direction: rtl;
           }
         }
       }
