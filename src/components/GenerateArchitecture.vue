@@ -39,6 +39,11 @@ export default {
     Floor
   },
   mounted() {
+    var netrunners = localStorage.getItem('netrunners');
+    if (netrunners) {
+      store.netArch.netrunners = JSON.parse(netrunners);
+    }
+
     this.generateLobby();
   },
   computed: {
@@ -78,11 +83,11 @@ export default {
         id: self.crypto.randomUUID(),
         feature: this.randomFeature(),
         difficulty: 0,
+        netrunners: [],
         split: [],
       };
     },
     randomFeature() {
-      console.log(store.netArch.rollTableLobby);
       return store.netArch.rollTableLobby[Math.floor(Math.random() * store.netArch.rollTableLobby.length)];
     }
   }

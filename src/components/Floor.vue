@@ -12,10 +12,10 @@
           <div class="floor-display">
             <div class="floor-num">
               <div class="floor-header">Floor</div>
-              {{ index + 1 }}<small v-if="floorLetter">{{ floorLetter }}</small>
+              <span class="floor-num-value">{{ index + 1 }}<small v-if="floorLetter">{{ floorLetter }}</small></span>
               <div class="floor-mobile-dv">
                 <div class="floor-header">DV</div>
-                {{ element.feature.DV || '-' }}
+                <span class="floor-num-value">{{ element.feature.DV || '-' }}</span>
               </div>
             </div>
             <div class="floor-feature">
@@ -36,6 +36,7 @@
                 <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
               </div>
               <div class="floor-feature-content">
+                <FloorNetrunners :list="element.netrunners" />
                 <strong>{{ element.feature.type }}</strong>
                 <template v-if="element.feature.type != 'Password' && element.feature.type != 'Black ICE'">
                   :
@@ -57,7 +58,7 @@
             </div>
             <div class="floor-dv">
               <div class="floor-header">DV</div>
-              {{ element.feature.DV || '-' }}
+              <span class="floor-num-value">{{ element.feature.DV || '-' }}</span>
             </div>
 
             <div class="floor-controls">
@@ -121,6 +122,7 @@ import draggable from "vuedraggable";
 import contenteditable from 'vue-contenteditable'
 import {store} from '../store'
 import FloorBlackIce from "./FloorBlackIce.vue";
+import FloorNetrunners from "./FloorNetrunners.vue";
 
 export default {
   props: {
@@ -148,8 +150,9 @@ export default {
   components: {
     draggable,
     contenteditable,
-    FloorBlackIce
-  },
+    FloorBlackIce,
+    FloorNetrunners
+},
   methods: {
     addRoom(difficulty, index) {
       if (index > -1) {
@@ -195,6 +198,7 @@ export default {
         id: self.crypto.randomUUID(),
         feature: this.randomFeature(difficulty),
         difficulty: difficulty,
+        netrunners: [],
         split: []
       };
     },
@@ -261,6 +265,10 @@ export default {
         }
         .floor-mobile-dv {
           display:none;
+        }
+        .floor-num-value {
+          font-family: 'Oxanium', sans-serif;
+          font-weight: 700;
         }
       }
       .floor-feature {

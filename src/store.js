@@ -32,6 +32,7 @@ export const store = reactive({
     netrunners: [],
     floors: [],
     draggingBlackIce: false,
+    draggingNetrunners: false,
     blackIce,
     rollTableLobby: [
       {type: 'File', description: 'Some boring file...', DV: 6, blackIce: [], demons: []},
