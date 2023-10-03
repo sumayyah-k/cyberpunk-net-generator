@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import {toRaw} from 'vue'
 import Floor from './Floor.vue';
 import {store} from '../store'
 
@@ -79,9 +80,10 @@ export default {
       this.floors.push(this.generateLobbyRoom());
     },
     generateLobbyRoom() {
+      const feature = this.randomFeature();
       return {
         id: self.crypto.randomUUID(),
-        feature: this.randomFeature(),
+        feature: structuredClone(toRaw(feature)),
         difficulty: 0,
         netrunners: [],
         split: [],

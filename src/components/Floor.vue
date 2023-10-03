@@ -53,7 +53,10 @@
                     <div class="rez"><input type="number" v-model="bi.currentRez" min="0" :max="bi.type.rez"/> / {{ bi.type.rez }}</div>
                   </div>
                 </div>
-                <FloorBlackIce :list="element.feature.blackIce" :show-full="element.netrunners.length > 0"/>
+                <FloorBlackIce
+                  :list="element.feature.blackIce"
+                  :show-full="element.netrunners.length > 0"
+                />
               </div>
             </div>
             <div class="floor-dv">
@@ -118,6 +121,7 @@
 </template>
 
 <script>
+import {toRaw} from 'vue';
 import draggable from "vuedraggable";
 import contenteditable from 'vue-contenteditable'
 import {store} from '../store'
@@ -194,9 +198,10 @@ export default {
       }
     },
     generateRoom(difficulty) {
+      const feature = this.randomFeature();
       return {
         id: self.crypto.randomUUID(),
-        feature: this.randomFeature(difficulty),
+        feature: structuredClone(toRaw(feature)),
         difficulty: difficulty,
         netrunners: [],
         split: []

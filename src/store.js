@@ -11,6 +11,9 @@ import krakenSvg from './assets/icons/giant-squid.svg?raw';
 import wispSvg from './assets/icons/noodle-ball.svg?raw';
 import killerSvg from './assets/icons/jason-mask.svg?raw';
 import sabertoothSvg from './assets/icons/saber-toothed-cat-head.svg?raw';
+import impSvg from './assets/icons/imp.svg?raw';
+import efreetSvg from './assets/icons/muscle-up.svg?raw';
+import balronSvg from './assets/icons/tentacles-skull.svg?raw';
 
 const blackIce = {
   asp: {name: 'Asp', icon: snakeSvg, type: 'Anti-Personnel Black ICE', per: 4, spd: 6, atk: 2, def: 2, rez: 15, cost: 100, effect: 'Destroys a single Program installed on the enemy Netrunner\'s Cyberdeck at random.'},
@@ -26,6 +29,11 @@ const blackIce = {
   killer: {name: 'Killer', icon: killerSvg, type: 'Anti-Program Black ICE', per: 4, spd: 8, atk: 6, def: 2, rez: 20, cost: 500, effect: 'Destroys a single Program installed on the enemy Netrunner\'s Cyberdeck at random.'},
   sabertooth: {name: 'Sabertooth', icon: sabertoothSvg, type: 'Anti-Program Black ICE', per: 8, spd: 6, atk: 6, def: 2, rez: 25, cost: 1000, effect: 'Destroys a single Program installed on the enemy Netrunner\'s Cyberdeck at random.'},
 };
+const demons = {
+  imp: {name: 'Imp', icon: impSvg, type: 'Demon', interface: 3, netActions: 2, combatNum: 14, rez: 15, cost: 100, effect: 'Icon: Small orange sphere of light with red horns'},
+  efreet: {name: 'Efreet', icon: efreetSvg, type: 'Demon', interface: 4, netActions: 3, combatNum: 14, rez: 25, cost: 1000, effect: 'Destroys a single Program installed on the enemy Netrunner\'s Cyberdeck at random.'},
+  balron: {name: 'Balron', icon: balronSvg, type: 'Demon', interface: 7, netActions: 4, combatNum: 14, rez: 30, cost: 500, effect: 'Destroys a single Program installed on the enemy Netrunner\'s Cyberdeck at random.'},
+};
 
 export const store = reactive({
   netArch: {
@@ -34,6 +42,7 @@ export const store = reactive({
     draggingBlackIce: false,
     draggingNetrunners: false,
     blackIce,
+    demons,
     rollTableLobby: [
       {type: 'File', description: 'Some boring file...', DV: 6, blackIce: [], demons: []},
       {type: 'Password', description: null, DV: 6, blackIce: [], demons: []},

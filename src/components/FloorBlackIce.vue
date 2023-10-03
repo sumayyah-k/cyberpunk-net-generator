@@ -1,7 +1,7 @@
 <template>
   <draggable
     :list="list"
-    item-key="name"
+    item-key="id"
     group="blackice"
     class="floor-black-ice-wrap"
     :class="{'floor-black-ice-wrap-visibly-empty': store.draggingBlackIce, 'floor-black-ice-full': showFull}"
@@ -19,20 +19,26 @@
           <table class="stats">
             <thead>
               <tr>
-                <th title="Perception">PER</th>
-                <th title="Speed">SPD</th>
-                <th title="Attack">ATK</th>
-                <th title="Defense">DEF</th>
-                <th>Cost</th>
+                <th v-if="element.type.type == 'Demon'" title="Interface">Interface</th>
+                <th v-if="element.type.type == 'Demon'" title="NET Actions">NET Actions</th>
+                <th v-if="element.type.type == 'Demon'" title="Combat Number">Combat Number</th>
+                <th v-if="element.type.type != 'Demon'" title="Perception">PER</th>
+                <th v-if="element.type.type != 'Demon'" title="Speed">SPD</th>
+                <th v-if="element.type.type != 'Demon'" title="Attack">ATK</th>
+                <th v-if="element.type.type != 'Demon'" title="Defense">DEF</th>
+                <th v-if="element.type.type != 'Demon'">Cost</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{ element.type.per }}</td>
-                <td>{{ element.type.spd }}</td>
-                <td>{{ element.type.atk }}</td>
-                <td>{{ element.type.def }}</td>
-                <td>{{ element.type.cost }}eb</td>
+                <td v-if="element.type.type == 'Demon'">{{ element.type.interface }}</td>
+                <td v-if="element.type.type == 'Demon'">{{ element.type.netActions }}</td>
+                <td v-if="element.type.type == 'Demon'">{{ element.type.combatNum }}</td>
+                <td v-if="element.type.type != 'Demon'">{{ element.type.per }}</td>
+                <td v-if="element.type.type != 'Demon'">{{ element.type.spd }}</td>
+                <td v-if="element.type.type != 'Demon'">{{ element.type.atk }}</td>
+                <td v-if="element.type.type != 'Demon'">{{ element.type.def }}</td>
+                <td v-if="element.type.type != 'Demon'">{{ element.type.cost }}eb</td>
               </tr>
             </tbody>
           </table>

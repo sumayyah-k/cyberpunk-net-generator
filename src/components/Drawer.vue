@@ -31,6 +31,20 @@
         <div class="black-ice-icon" :title="element.name" v-html="element.icon"></div>
       </template>
     </draggable>
+    <div class="drawer-header">Demons</div>
+    <draggable
+      :list="Object.values(store.netArch.demons)"
+      item-key="name"
+      group="blackice"
+      class="floor-black-ice-wrap drawer-black-ice-wrap"
+      @start="store.draggingBlackIce = true"
+      @end="store.draggingBlackIce = false"
+      :clone="cloneBlackIce"
+    >
+      <template #item="{ element, index }">
+        <div class="black-ice-icon" :title="element.name" v-html="element.icon"></div>
+      </template>
+    </draggable>
   </div>
 </template>
 
@@ -47,13 +61,11 @@ export default {
     draggable,
     Netrunner
   },
-  mounted() {
-    console.log(store.netArch.blackIce);
-  },
   methods: {
     cloneBlackIce({ name }) {
-      const blackIce = store.netArch.blackIce[name.toLowerCase()];
+      const blackIce = store.netArch.blackIce[name.toLowerCase()] ? store.netArch.blackIce[name.toLowerCase()] :  store.netArch.demons[name.toLowerCase()];
       return {
+        id: self.crypto.randomUUID(),
         type: blackIce,
         currentRez: blackIce.rez
       };
