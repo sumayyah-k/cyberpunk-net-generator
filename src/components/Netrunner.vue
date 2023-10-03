@@ -1,7 +1,13 @@
 <template>
     <div class="netrunner" :class="{'expanded-view': expanded}" @click="expand">
-      <div class="icon" title="Change Image" :style="{backgroundImage: netrunner.image ? 'url(' + netrunner.image + ')': null}">
-        <input type="file" @change="imageChange" ref="netrunner-image-input"/>
+      <div class="icon-wrap">
+        <div class="icon" title="Change Image" :style="{backgroundImage: netrunner.image ? 'url(' + netrunner.image + ')': null}">
+          
+        </div>
+        <button v-if="expanded" type="button" class="netrunner-image-btn">
+          Change
+          <input type="file" @change="imageChange" ref="netrunner-image-input"/>
+        </button>
       </div>
       <div class="name" v-if="!expanded && !collaspedMini">
       {{ netrunner.name }}
@@ -99,6 +105,14 @@ export default {
     height:2rem;
     background-color: var(--background-color);
     background-size: cover;
+  }
+  .netrunner-image-btn {
+    position: relative;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--red);
+    border:none;
+    line-height: 1.2rem;
     input[type=file] {
       position: absolute;
       top:0;
@@ -140,6 +154,10 @@ export default {
   }
   &.expanded-view {
     align-items: flex-start;
+    .icon {
+      width: 3.65rem;
+      height: 3.65rem;
+    }
   }
 }
 </style>
