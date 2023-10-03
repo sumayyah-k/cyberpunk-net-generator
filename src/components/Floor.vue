@@ -25,15 +25,32 @@
                   type="button"
                   class="floor-control-btn"
                   @click="changeDifficulty(element)"
+                  @contextmenu.prevent.stop="changeDifficulty(element, true)"
                   title="Change Difficulty"
                 >
                   {{ difficultyTable[element.difficulty] }}
                 </button>
               </div>
               <div class="floor-top-right-controls">
-                <button type="button" @click="cycleFeature(element)" class="floor-control-btn floor-reroll-btn" title="Cycle Floor Type">&#x21bb;</button>
-                <button type="button" @click="rerollFloor(element)" class="floor-control-btn floor-reroll-btn" title="Reroll Floor">&#127922;</button>
-                <button type="button" @click="removeFloor(index)" class="floor-control-btn floor-remove-btn" title="Remove Floor">&times;</button>
+                <button
+                  type="button"
+                  @click="cycleFeature(element)"
+                  @contextmenu.prevent.stop="cycleFeature(element, true)"
+                  class="floor-control-btn floor-reroll-btn"
+                  title="Cycle Floor Type"
+                >&#x21bb;</button>
+                <button
+                  type="button"
+                  @click="rerollFloor(element)"
+                  class="floor-control-btn floor-reroll-btn"
+                  title="Reroll Floor"
+                >&#127922;</button>
+                <button
+                  type="button"
+                  @click="removeFloor(index)"
+                  class="floor-control-btn floor-remove-btn"
+                  title="Remove Floor"
+                >&times;</button>
               </div>
               <div class="floor-feature-content">
                 <FloorNetrunners :list="element.netrunners" />
@@ -171,17 +188,23 @@ export default {
     rerollFloor(floor) {
       floor.feature = this.randomFeature(floor.difficulty);
     },
-    changeDifficulty(floor) {
-      console.log('old', floor.difficulty);
-      if (floor.difficulty == this.difficultyTable.length - 1) {
-        floor.difficulty = 0;
+    changeDifficulty(floor, reverse) {
+      if (reverse === true) {
+        if (floor.difficulty == 0) {
+          floor.difficulty = this.difficultyTable.length - 1;
+        } else {
+          floor.difficulty = floor.difficulty - 1;
+        }
       } else {
-        floor.difficulty = floor.difficulty + 1;
+        if (floor.difficulty == this.difficultyTable.length - 1) {
+          floor.difficulty = 0;
+        } else {
+          floor.difficulty = floor.difficulty + 1;
+        }
       }
-      console.log('new', floor.difficulty);
       floor.feature = this.randomFeature(floor.difficulty);
     },
-    cycleFeature(floor) {
+    cycleFeature(floor, reverse) {
       const table = [
         {type: 'Black ICE', description: 'Asp', DV: null, blackIce: [store.netArch.blackIce.asp], demons: []},
         {type: 'Password', description: null, DV: 4 + (floor.difficulty * 2), blackIce: [], demons: []},
@@ -189,7 +212,11 @@ export default {
         {type: 'File', description: 'Some File...', DV: 4 + (floor.difficulty * 2), blackIce: [], demons: []},
       ];
       const index = table.findIndex(f => f.type == floor.feature.type);
-      floor.feature = table[index == table.length - 1 ? 0 : index + 1]
+      if (reverse) {
+        floor.feature = table[index == 0 ? table.length - 1 : index - 1]
+      } else {
+        floor.feature = table[index == table.length - 1 ? 0 : index + 1]
+      }
     },
     splitFloor(floor) {
       floor.split.push({id: self.crypto.randomUUID(), rooms: [this.generateRoom(floor.difficulty)]})
@@ -225,7 +252,7 @@ export default {
       const roll1 = Math.floor( Math.random() * 6 + 1);
       const roll2 = Math.floor( Math.random() * 6 + 1);
       const roll3 = Math.floor( Math.random() * 6 + 1);
-      console.log(difficulty, roll1, roll2, roll3, roll1 + roll2 + roll3, rollTable[roll1 + roll2 + roll3 - 3])
+
       return rollTable[(roll1 + roll2 + roll3) - 3];
     },
   }
