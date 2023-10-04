@@ -1,7 +1,8 @@
 <template>
   <div class="generator">
     <h1>Cyberpunk: Red Net architecture generator</h1>
-    <p>Pretty basic for now. Refresh to start over.</p>
+    <p>Pretty basic for now. Refresh to generate a new architecture.</p>
+    <p>Netrunners are saved in your browser's local storage to be used between architectures, you can clear this with the button in the top right.</p>
     <p>
       Average Difficulty: {{ difficultyRating[averageDifficulty].type }}<br />
       Interface of a Netrunner with a fighting chance: {{ difficultyRating[averageDifficulty].fightingChance || 'N/A' }}<br />
@@ -98,6 +99,7 @@ export default {
 
 <style scoped>
 .generator {
+  padding-top: calc(var(--header-height) + 1rem);
   padding-left: calc(var(--drawer-width) + 1rem);
 }
 footer {

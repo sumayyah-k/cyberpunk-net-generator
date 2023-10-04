@@ -2,6 +2,7 @@
   --background-color: #242424;
   --red: #d02b24;
   --yellow: #eeff00;
+  --header-height: 3.5rem;
   --drawer-width: 4.5rem;
 
   font-family: 'Gothic A1', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -28,4 +29,13 @@
 .black-ice-icon svg {
   width:2rem !important;
   height:2rem !important;
+}
+.btn {
+  line-height:1.5;
+  border:none;
+  border-radius:0;
+}
+
+.btn.btn-primary {
+  background-color: var(--red);
 }
