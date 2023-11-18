@@ -1,8 +1,16 @@
 <template>
   <header class="top-bar">
+    <h1>Cyberpunk: Red Net architecture generator</h1>
     <ul class="menu-left"></ul>
     <ul class="menu-right">
       <li>
+        <button
+          type="button"
+          class="btn btn-primary mr-3"
+          @click="store.rightSidebarVisible = !store.rightSidebarVisible"
+        >
+          Help
+        </button>
         <button
           type="button"
           class="btn btn-primary"
@@ -16,8 +24,10 @@
 </template>
 
 <script>
+import { store } from '../store';
   export default {
     data: () => ({
+      store,
       confirmClearLocalStorage: false,
     }),
     methods: {
@@ -47,6 +57,7 @@ header.top-bar {
   margin: 0;
   padding:0 0 0 calc(var(--drawer-width) + 1rem);
   background: var(--yellow);
+  color: var(--text-dark);
   ul {
     display:flex;
     align-items: center;

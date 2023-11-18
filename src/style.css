@@ -4,6 +4,9 @@
   --yellow: #eeff00;
   --header-height: 3.5rem;
   --drawer-width: 4.5rem;
+  --right-sidebar-width: 20rem;
+  --text-light: #fff;
+  --text-dark: #333;
 
   font-family: 'Gothic A1', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -38,4 +41,7 @@
 
 .btn.btn-primary {
   background-color: var(--red);
+  color: var(--text-light);
 }
+
+.mr-3 {margin-right: 1rem;}

@@ -41,6 +41,7 @@ export const store = reactive({
     floors: [],
     draggingBlackIce: false,
     draggingNetrunners: false,
+    rightSidebarVisible: false,
     blackIce,
     demons,
     rollTableLobby: [
